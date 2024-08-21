@@ -1,6 +1,12 @@
 body {
     background-color: rgb(1, 0, 3);
     color: white;
+    font-family: "Roboto", sans-serif;
+}
+
+h1 {
+    font-weight: 900;
+    font-size: 50px;
 }
 
 #container {
@@ -8,6 +14,7 @@ body {
 }
 
 .pathLabel{
+    font-weight: 600;
     font-size: 24px;
     margin-right: 5px;
 }
@@ -23,6 +30,8 @@ body {
 }
 
 .btnContainer {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
     color: rgb(1, 0, 3);
     background-color: white;
     border-radius: 7px;
@@ -40,6 +49,11 @@ body {
 .pathWay {
     display: flex;
     justify-content: center;
+    margin-top: 50px;
+}
+
+#addFolders {
+    margin-top: 30px;
 }
 
 #copyright {

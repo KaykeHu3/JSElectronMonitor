@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "electron": "^32.0.0",
     "fs-extra": "^11.2.0",
     "node-watch": "^0.7.4"
   },
@@ -9,10 +8,32 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "clean": "rimraf ./node_modules/.cache",
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.monitoringjs.monitor",
+    "productName": "MonitoringJS",
+    "files": [
+      "**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "Monitoramento de arquivos em NodeJS, app com Electron",
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^24.13.3",
+    "rimraf": "^6.0.1"
+  }
 }
