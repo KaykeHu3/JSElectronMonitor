@@ -3,22 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
   <title>Monitor de Arquivos</title>
 </head>
 <body>
-  <h1>Monitor de Arquivos</h1>
-  <div>
-    <label for="sourceFolder">Pasta de Origem:</label>
-    <input type="text" id="sourceFolder" readonly>
-    <button id="selectSourceFolder">Selecionar Pasta de Origem</button>
+  <div id="container">
+    <h1>FILES MONITOR</h1>
+    <div class="pathWay">
+      <label for="sourceFolder" class="pathLabel">Pasta de Origem:</label>
+      <input type="text" id="sourceFolder" class="pathBox" readonly>
+      <button id="selectSourceFolder" class="btnContainer">Selecionar Pasta de Origem</button>
+    </div>
+    <div class="pathWay">
+      <label for="destinationFolder" class="pathLabel">Pasta de Destino:</label>
+      <input type="text" id="destinationFolder" class="pathBox" readonly>
+      <button id="selectDestFolder" class="btnContainer">Selecionar Pasta de Destino</button>
+    </div>
+    <button id="addFolders" class="btnContainer">Adicionar Pastas</button>
   </div>
-  <div>
-    <label for="destinationFolder">Pasta de Destino:</label>
-    <input type="text" id="destinationFolder" readonly>
-    <button id="selectDestFolder">Selecionar Pasta de Destino</button>
-  </div>
-  <button id="addFolders">Adicionar Pastas</button>
-
+  <footer id="copyright">Allrights Reserved By Kayke De Paula Menezes</footer>
   <script src="renderer.js"></script>
 </body>
 </html>

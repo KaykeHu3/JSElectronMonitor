@@ -1,0 +1,49 @@
+body {
+    background-color: rgb(1, 0, 3);
+    color: white;
+}
+
+#container {
+    text-align: center;
+}
+
+.pathLabel{
+    font-size: 24px;
+    margin-right: 5px;
+}
+
+.pathBox {
+    background-color: white;
+    border-radius: 7px;
+    border: solid 2px white;
+    margin:0 6px 10px 0;
+    height: 25px;
+    width: 300px;
+    color: rgb(1, 0, 3);
+}
+
+.btnContainer {
+    color: rgb(1, 0, 3);
+    background-color: white;
+    border-radius: 7px;
+    height: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    &:hover{
+        background-color: rgb(190, 190, 190)
+    }
+    &:active {
+        background-color: rgb(73, 73, 73);
+    }
+}
+
+.pathWay {
+    display: flex;
+    justify-content: center;
+}
+
+#copyright {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
