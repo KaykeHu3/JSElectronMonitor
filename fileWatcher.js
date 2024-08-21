@@ -1,8 +1,13 @@
 const watch = require('node-watch');
 const fs = require('fs-extra');
 const path = require('path');
+const os = require('os');
 
-const pathsFile = path.join(__dirname, 'paths.json');
+const userDataPath = path.join(os.homedir(), 'myapp-data'); // Usar um diretório de dados do usuário
+const pathsFile = path.join(userDataPath, 'paths.json');
+
+// Verifica se o diretório existe e cria se não existir
+fs.ensureDirSync(userDataPath);
 
 let foldersMap = {};
 
@@ -26,7 +31,7 @@ async function isFileNew(filePath) {
     const stats = await fs.stat(filePath);
     const now = new Date();
     const creationTime = new Date(stats.birthtime);
-    return (now - creationTime) < 10000; // 10000 ms = 10 segundos
+    return (now - creationTime) < 2000; // 2000 ms = 2 segundos
   } catch (err) {
     console.error(`Erro ao verificar o arquivo: ${err.message}`);
     return false;
@@ -83,5 +88,9 @@ function addFolderMap(newFolderMap) {
   saveFoldersMap();
   startWatchingFolders();
 }
+
+(async () => {
+  await loadFoldersMap();
+})();
 
 module.exports = { addFolderMap, loadFoldersMap };
