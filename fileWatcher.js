@@ -11,10 +11,20 @@ fs.ensureDirSync(userDataPath);
 
 let foldersMap = {};
 
+// Cria a estrutura de pastas no destino
+function ensureDestDir(filePath, destDir) {
+  const relativePath = path.relative(path.dirname(filePath), filePath);
+  const destPath = path.join(destDir, relativePath);
+  const destDirPath = path.dirname(destPath);
+  fs.ensureDirSync(destDirPath);
+}
+
+// Move o arquivo com um atraso
 async function moveFileWithDelay(srcPath, destPath, delay) {
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
+        ensureDestDir(srcPath, path.dirname(destPath));
         await fs.move(srcPath, destPath);
         console.log(`Arquivo movido: ${srcPath}`);
         resolve();
@@ -26,6 +36,7 @@ async function moveFileWithDelay(srcPath, destPath, delay) {
   });
 }
 
+// Verifica se o arquivo é novo
 async function isFileNew(filePath) {
   try {
     const stats = await fs.stat(filePath);
@@ -38,16 +49,17 @@ async function isFileNew(filePath) {
   }
 }
 
+// Começa a observar as pastas
 function startWatchingFolders() {
   console.log('Starting to watch folders:', foldersMap);
   Object.keys(foldersMap).forEach(sourceFolder => {
     const destinationFolder = foldersMap[sourceFolder];
 
-    watch(sourceFolder, { recursive: false }, async (event, filePath) => {
+    watch(sourceFolder, { recursive: true }, async (event, filePath) => {
       if (event === 'update' && filePath.endsWith('.json2')) {
         if (!await isFileNew(filePath)) {
-          const fileName = path.basename(filePath);
-          const destPath = path.join(destinationFolder, fileName);
+          const relativePath = path.relative(sourceFolder, filePath);
+          const destPath = path.join(destinationFolder, relativePath);
           console.log(`Arquivo modificado em ${sourceFolder}: ${filePath}`);
           await moveFileWithDelay(filePath, destPath, 5000); // 5000 ms = 5 segundos
         } else {
@@ -60,6 +72,7 @@ function startWatchingFolders() {
   });
 }
 
+// Carrega o mapa de pastas
 async function loadFoldersMap() {
   try {
     if (await fs.pathExists(pathsFile)) {
@@ -74,6 +87,7 @@ async function loadFoldersMap() {
   }
 }
 
+// Salva o mapa de pastas
 async function saveFoldersMap() {
   try {
     await fs.writeJson(pathsFile, foldersMap);
@@ -82,6 +96,7 @@ async function saveFoldersMap() {
   }
 }
 
+// Adiciona um novo mapa de pastas
 function addFolderMap(newFolderMap) {
   console.log('Adding new folderMap:', newFolderMap); // Verifique os dados recebidos
   foldersMap = { ...foldersMap, ...newFolderMap };
@@ -89,6 +104,7 @@ function addFolderMap(newFolderMap) {
   startWatchingFolders();
 }
 
+// Executa o carregamento inicial do mapa de pastas
 (async () => {
   await loadFoldersMap();
 })();
