@@ -16,6 +16,10 @@ function createWindow() {
   });
 
   mainWindow.loadFile('index.html');
+  mainWindow.on('close', (event) => {
+    event.preventDefault();
+    mainWindow.minimize();
+  });
 }
 
 app.whenReady().then(async () => {

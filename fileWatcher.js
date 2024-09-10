@@ -19,14 +19,31 @@ function ensureDestDir(filePath, destDir) {
   fs.ensureDirSync(destDirPath);
 }
 
+// Gera um novo caminho de arquivo se já existir no destino, adicionando sufixo incremental
+async function getUniqueDestPath(filePath) {
+  let uniquePath = filePath;
+  let counter = 1;
+
+  while (await fs.pathExists(uniquePath)) {
+    const ext = path.extname(filePath);
+    const base = path.basename(filePath, ext);
+    const dir = path.dirname(filePath);
+    uniquePath = path.join(dir, `${base}(${counter})${ext}`);
+    counter += 1;
+  }
+
+  return uniquePath;
+}
+
 // Move o arquivo com um atraso
 async function moveFileWithDelay(srcPath, destPath, delay) {
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
       try {
         ensureDestDir(srcPath, path.dirname(destPath));
-        await fs.move(srcPath, destPath);
-        console.log(`Arquivo movido: ${srcPath}`);
+        const uniqueDestPath = await getUniqueDestPath(destPath);
+        await fs.move(srcPath, uniqueDestPath);
+        console.log(`Arquivo movido para ${uniqueDestPath}: ${srcPath}`);
         resolve();
       } catch (err) {
         console.error(`Erro ao mover o arquivo: ${err.message}`);
@@ -56,7 +73,7 @@ function startWatchingFolders() {
     const destinationFolder = foldersMap[sourceFolder];
 
     watch(sourceFolder, { recursive: true }, async (event, filePath) => {
-      if (event === 'update' && filePath.endsWith('.json2')) {
+      if (event === 'update' && filePath.endsWith('.pdf')) {
         if (!await isFileNew(filePath)) {
           const relativePath = path.relative(sourceFolder, filePath);
           const destPath = path.join(destinationFolder, relativePath);
